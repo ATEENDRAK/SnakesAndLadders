@@ -6,31 +6,41 @@ public class Game {
     Board board;
     List<Player> players;
     Dice dice;
-    int currentPlayerIndex = 0;
+    IWinningStrategy iWinningStrategy;
+    IPlayerStartingPositionStrategy iPlayerStartingPositionStrategy;
+    IFindNextPlayerStrategy iFindNextPlayerStrategy;
+    int currentPlayerIndex;
 
-    public Game(Board board, List<Player> players, Dice dice) {
+    public Game(Board board, List<Player> players, Dice dice, IWinningStrategy iWinningStrategy,
+                IPlayerStartingPositionStrategy iPlayerStartingPositionStrategy,
+                IFindNextPlayerStrategy iFindNextPlayerStrategy) {
         this.board = board;
         this.players = players;
         this.dice = dice;
-
+        this.iWinningStrategy = iWinningStrategy;
+        this.iPlayerStartingPositionStrategy = iPlayerStartingPositionStrategy;
+        this.iFindNextPlayerStrategy = iFindNextPlayerStrategy;
     }
+
+
     public void run(){
         for(Player player : players){
-            player.currentPosition = board.getBoxes().getFirst();
+            iPlayerStartingPositionStrategy.setStartingPosition(player);
         }
+
         while(true){
-            Player player = players.get(currentPlayerIndex);
+            Player player = iFindNextPlayerStrategy.findNextPlayer(0, players);
             System.out.println("player turn color "+ player.getColor());
             int diceVal = dice.throwDice();
             System.out.println("Dice val "+diceVal);
-            player.currentPosition=board.getBoxes().get(player.currentPosition.num + diceVal);
+            player.currentPosition=board.getBoxes().get(Math.min(player.currentPosition.num + diceVal,100));
             System.out.println("Player current position "+ player.currentPosition.getNum());
-            //board.applySnakeAndLadder(player);
-            if(player.currentPosition.num >= 100){
+            board.apply(player);
+            if(iWinningStrategy.isWinner(player)){
                 System.out.println("Winner "+ player.color);
                 return;
             }
-            currentPlayerIndex = (currentPlayerIndex+1)%players.size();
+
         }
     }
 }

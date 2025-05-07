@@ -4,13 +4,12 @@ import java.util.List;
 
 public class Board {
     List<Box> boxes;
-    List<Snake> snakes;
-    List<Ladder> ladders;
 
-    public Board(List<Box> boxes, List<Snake> snakes, List<Ladder> ladders) {
+    List<IBoardEntity> iBoardEntities;
+
+    public Board(List<Box> boxes, List<IBoardEntity> iBoardEntities) {
         this.boxes = boxes;
-        this.snakes = snakes;
-        this.ladders = ladders;
+        this.iBoardEntities = iBoardEntities;
     }
 
     public List<Box> getBoxes() {
@@ -21,32 +20,17 @@ public class Board {
         this.boxes = boxes;
     }
 
-    public List<Snake> getSnakes() {
-        return snakes;
+    public List<IBoardEntity> getiBoardEntities() {
+        return iBoardEntities;
     }
 
-    public void setSnakes(List<Snake> snakes) {
-        this.snakes = snakes;
+    public void setiBoardEntities(List<IBoardEntity> iBoardEntities) {
+        this.iBoardEntities = iBoardEntities;
     }
 
-    public List<Ladder> getLadders() {
-        return ladders;
-    }
-
-    public void setLadders(List<Ladder> ladders) {
-        this.ladders = ladders;
-    }
-
-
-
-    void applySnakeAndLadder(Player player){
-        for(Snake snake : snakes){
-            if(player.currentPosition.num.equals(snake.mouth))
-                player.currentPosition = boxes.get(snake.tail);
-        }
-        for(Ladder ladder : ladders){
-            if(player.currentPosition.num.equals(ladder.bottom))
-                player.currentPosition = boxes.get(ladder.top);
+    void apply(Player player){
+        for(IBoardEntity entity : iBoardEntities){
+            entity.apply(player, this);
         }
     }
 }

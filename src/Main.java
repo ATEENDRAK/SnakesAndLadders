@@ -49,7 +49,7 @@ public class Main {
         List<Player> players = new ArrayList<>();
         players.add(player1);
         players.add(player2);
-        Dice dice = new Dice();
+        Dice dice = new Dice(6);
         IWinningStrategy iWinningStrategy = new DeafultWinningStrategy();
         IPlayerStartingPositionStrategy iPlayerStartingPositionStrategy = new DefaultPlayerStartingPositionStrategy(boxes.getFirst());
         IFindNextPlayerStrategy iFindNextPlayerStrategy = new RoundRobinFindNextPlayerStrategy();

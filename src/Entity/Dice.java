@@ -4,11 +4,13 @@ import java.util.Random;
 
 public class Dice {
     int faces;
-    Random random = new Random();
-    public Dice() {
+    Random random;
+    public Dice(int faces) {
+        this.faces = faces;
+        random = new Random();
     }
 
     public int throwDice(){
-        return 3;
+        return random.nextInt(faces)+1;
     }
 }
